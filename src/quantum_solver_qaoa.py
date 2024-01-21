@@ -148,7 +148,6 @@ def QAOA_solver_for_max_cut(
     Args:
         qubo_matrix: QUBO matrix representing the problem
         register: The atomic register representing the problem in the quantum device
-        function_to_minimize: Function representing the problem to minimize
         p_layers: Number of layers for the QAOA
         optimizer_: Minimizer to use from scipy. Default COBYLA
 
