@@ -47,7 +47,7 @@ def define_sequence(
 # Building the quantum loop
 
 
-def quantum_loop(
+def quantum_loop_qaoa(
     parameters,
     sequence,
     p_layers,
@@ -84,6 +84,7 @@ def plot_distribution(count_dist):
     plt.ylabel("counts")
     plt.bar(count_dist.keys(), count_dist.values(), width=0.5)
     plt.xticks(rotation="vertical")
+    plt.savefig('histogram.pdf', dpi = 250, bbox_inches='tight' )
     plt.show()
 
 
@@ -119,7 +120,7 @@ def get_cost_average(counts_distr, Q):
     return cost / sum(counts_distr.values())  # Divide by total samples
 
 
-def func_to_min(param, *args):
+def func_to_min_1(param, *args):
     """Function to minimize
 
     Args:
@@ -132,7 +133,7 @@ def func_to_min(param, *args):
     Q, sequence, p_l = args
     # sequence  = args[0][1]
     # p_l = args[0][2]
-    C = quantum_loop(param, sequence, p_l)
+    C = quantum_loop_qaoa(param, sequence, p_l)
     cost = get_cost_average(C, Q)
     return cost
 
@@ -140,7 +141,6 @@ def func_to_min(param, *args):
 def QAOA_solver_for_max_cut(
     qubo_matrix,
     register,
-    function_to_minimize,
     p_layers,
     optimizer_="COBYLA",
 ):
@@ -149,7 +149,6 @@ def QAOA_solver_for_max_cut(
     Args:
         qubo_matrix: QUBO matrix representing the problem
         register: The atomic register representing the problem in the quantum device
-        function_to_minimize: Function representing the problem to minimize
         p_layers: Number of layers for the QAOA
         optimizer_: Minimizer to use from scipy. Default COBYLA
 
@@ -169,7 +168,7 @@ def QAOA_solver_for_max_cut(
 
         try:
             res = minimize(
-                function_to_minimize,
+                func_to_min_1,
                 args=(qubo_matrix, sequence, p_layers),
                 x0=np.r_[random_beta, random_gamma],
                 method=optimizer_,  # 'Nelder-Mead'
@@ -187,9 +186,14 @@ def QAOA_solver_for_max_cut(
     return optimal_parameters
 
 
-def plot_solution(graph, Q_matrix, optimal_parameters, register, p_layers):
+def plot_solution_qaoa(graph,
+                       Q_matrix,
+                       optimal_parameters,
+                       register,
+                       p_layers,
+                       plot_histogram= False):
     sequence = define_sequence(register, p_layers)
-    optimial_count_dict = quantum_loop(optimal_parameters, sequence, p_layers)
+    optimial_count_dict = quantum_loop_qaoa(optimal_parameters, sequence, p_layers)
     best_solution = max(optimial_count_dict, key=optimial_count_dict.get)
     colors = [
         "b" if best_solution[node] == "0" else "r" for node in graph
@@ -197,6 +201,9 @@ def plot_solution(graph, Q_matrix, optimal_parameters, register, p_layers):
     best_cut = get_cost(best_solution, Q_matrix)
     print(f"Best solution: {best_solution} with {-best_cut} cuts")
 
-    # plot_distribution(optimial_count_dict)
-    plt.figure(figsize=(3, 2))
+    if plot_histogram:
+        plot_distribution(optimial_count_dict)
+
+    plt.figure(figsize=(6, 4))
     nx.draw(graph, with_labels=True, node_color=colors, font_weight="bold")
+    #plt.savefig('solution.pdf', dpi=250, bbox_inches='tight')
