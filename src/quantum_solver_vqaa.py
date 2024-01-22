@@ -146,7 +146,6 @@ def VQAA(
     Args:
         atomic_register: The atomic register representing the problem in the quantum device
         qubo_matrix: QUBO matrix representing the problem
-        function_to_min: Function representing the problem to minimize
         omega_range: The range of frequencies to used for the optimizer parameters. Default (1,5)
         detuning_range: The range of detuning to used for the optimizer parameters. Default (1,5)
         time_range:Range of time evolution for QAA to used in optimizer parameters.Default (8,25)
@@ -183,7 +182,11 @@ def VQAA(
     return optimal_parameters
 
 
-def plot_solution_vqaa(graph, Q_matrix, optimal_parameters, register):
+def plot_solution_vqaa(graph,
+                       Q_matrix,
+                       optimal_parameters,
+                       register,
+                       plot_histogram= False):
     # sequence = define_sequence(register,p_layers )
     optimial_count_dict = simple_quantum_loop(optimal_parameters, register)
     best_solution = max(optimial_count_dict, key=optimial_count_dict.get)
@@ -192,7 +195,8 @@ def plot_solution_vqaa(graph, Q_matrix, optimal_parameters, register):
     ]  # Define the colors of the nodes for the best solution
     best_cut = get_cost(best_solution, Q_matrix)
     print(f"Best solution: {best_solution} with {-best_cut} cuts")
+    if plot_histogram:
+        plot_distribution(optimial_count_dict)
 
-    # plot_distribution(optimial_count_dict)
     plt.figure(figsize=(3, 2))
     nx.draw(graph, with_labels=True, node_color=colors, font_weight="bold")
