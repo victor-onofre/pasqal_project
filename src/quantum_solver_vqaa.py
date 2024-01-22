@@ -84,6 +84,7 @@ def plot_distribution(count_dist):
     plt.ylabel("counts")
     plt.bar(count_dist.keys(), count_dist.values(), width=0.5)
     plt.xticks(rotation="vertical")
+    plt.savefig('histogram_vqaa.pdf', dpi=250, bbox_inches='tight')
     plt.show()
 
 

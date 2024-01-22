@@ -84,6 +84,7 @@ def plot_distribution(count_dist):
     plt.ylabel("counts")
     plt.bar(count_dist.keys(), count_dist.values(), width=0.5)
     plt.xticks(rotation="vertical")
+    plt.savefig('histogram.pdf', dpi = 250, bbox_inches='tight' )
     plt.show()
 
 
@@ -203,5 +204,6 @@ def plot_solution_qaoa(graph,
     if plot_histogram:
         plot_distribution(optimial_count_dict)
 
-    plt.figure(figsize=(3, 2))
+    plt.figure(figsize=(6, 4))
     nx.draw(graph, with_labels=True, node_color=colors, font_weight="bold")
+    #plt.savefig('solution.pdf', dpi=250, bbox_inches='tight')
