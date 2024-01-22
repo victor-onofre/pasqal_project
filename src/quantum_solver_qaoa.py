@@ -185,7 +185,12 @@ def QAOA_solver_for_max_cut(
     return optimal_parameters
 
 
-def plot_solution_qaoa(graph, Q_matrix, optimal_parameters, register, p_layers):
+def plot_solution_qaoa(graph,
+                       Q_matrix,
+                       optimal_parameters,
+                       register,
+                       p_layers,
+                       plot_histogram= False):
     sequence = define_sequence(register, p_layers)
     optimial_count_dict = quantum_loop_qaoa(optimal_parameters, sequence, p_layers)
     best_solution = max(optimial_count_dict, key=optimial_count_dict.get)
@@ -195,6 +200,8 @@ def plot_solution_qaoa(graph, Q_matrix, optimal_parameters, register, p_layers):
     best_cut = get_cost(best_solution, Q_matrix)
     print(f"Best solution: {best_solution} with {-best_cut} cuts")
 
-    # plot_distribution(optimial_count_dict)
+    if plot_histogram:
+        plot_distribution(optimial_count_dict)
+
     plt.figure(figsize=(3, 2))
     nx.draw(graph, with_labels=True, node_color=colors, font_weight="bold")
