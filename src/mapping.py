@@ -5,8 +5,15 @@ from scipy.spatial.distance import pdist, squareform
 
 
 def evaluate_mapping(new_coords, *args):
-    """Cost function to minimize. Ideally, the pairwise
-    distances are conserved"""
+    """Cost function to minimize.Function from the Pulser tutorial.
+
+    Args:
+        new_coords: the new coordinates for the encoding
+        args: QUBO matrix and shape
+
+    Returns:
+        cost distance
+    """
     Q, shape = args
     new_coords = np.reshape(new_coords, shape)
     new_Q = squareform(
