@@ -1,7 +1,7 @@
 # Solving the Max-Cut problem with Neutral Atoms
 
 In this work, I solved the Max-cut problem using the Quantum Approximate Optimization Algorithm (QAOA) and the Variational Quantum Adiabatic Algorithm (VQAA) 
-with neutral atoms. All simulations were done with [Pulser](https://pulser.readthedocs.io/en/stable/)
+with neutral atoms. All simulations were done with [Pulser](https://pulser.readthedocs.io/en/stable/). The report of the project is [here](https://github.com/victor-onofre/pasqal_project/blob/main/Report_PASQAL_modeling_coding_challenge_Victor_Onofre.pdf).
 
 The repo is organized as follows:
 
